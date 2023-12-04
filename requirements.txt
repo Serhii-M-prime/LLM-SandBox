@@ -7,4 +7,4 @@ auto-gptq
 optimum
 torch
 accelerate
-
+intel_extension_for_pytorch

@@ -33,18 +33,19 @@ def load_model():
     model = AutoModelForCausalLM.from_pretrained(
         "TheBloke/Llama-2-7B-Chat-GPTQ",
         trust_remote_code=True,
-        torch_dtype=torch.float16,
-        device_map="auto",
+        torch_dtype=torch.float32,
+        device_map="cpu",
         cache_dir="models_cache",
         revision="gptq-4bit-64g-actorder_True",
         config=config
     )
+    model.to_bettertransformer()
 
     tokenizer = AutoTokenizer.from_pretrained("TheBloke/Llama-2-7B-Chat-GPTQ", cache_dir="models_cache")
 
     generation_config = GenerationConfig.from_pretrained("TheBloke/Llama-2-7B-Chat-GPTQ", cache_dir="models_cache")
     generation_config.max_new_tokens = 1024
-    generation_config.temperature = 0.05
+    generation_config.temperature = 0.02
     generation_config.top_p = 0.85
     generation_config.top_k = 33
     generation_config.do_sample = True
