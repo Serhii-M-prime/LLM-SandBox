@@ -42,7 +42,7 @@ chainlit run app.py
 Training tool https://ludwig.ai/latest/
 ### Create separate python env to avoid dependencies versions conflicts
 ```bash
-cd mkdir "venv-tune"
+mkdir "venv-tune"
 ```
 ```bash
 # might be python3 if your OS not configured for work with python

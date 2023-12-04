@@ -1,1 +1,8 @@
-ludwig[full]
+ludwig
+ludwig[llm]
+ludwig[serve]
+ludwig[viz]
+ludwig[hyperopt]
+ludwig[explain]
+ludwig[tree]
+ludwig[benchmarking]
