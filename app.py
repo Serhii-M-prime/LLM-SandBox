@@ -25,8 +25,8 @@ Your superior email is superior@leap-gaming.com pleas ask client contact him if 
 
 
 def load_model():
-    config = AutoConfig.from_pretrained("TheBloke/Llama-2-7B-Chat-GPTQ")
-    config.quantization_config["use_exllama"] = False
+    config = AutoConfig.from_pretrained("TheBloke/Llama-2-7B-Chat-GPTQ", revision="gptq-4bit-64g-actorder_True")
+    config.quantization_config["use_exllama"] = True
     # config.quantization_config["disable_exllama"] = True
     config.quantization_config["exllama_config"] = {"version": 2}
 
@@ -35,14 +35,20 @@ def load_model():
         trust_remote_code=True,
         torch_dtype=torch.float16,
         device_map="auto",
-        cache_dir="models_cache",
+        # cache_dir="models_cache",
         revision="gptq-4bit-64g-actorder_True",
         config=config
     )
 
-    tokenizer = AutoTokenizer.from_pretrained("TheBloke/Llama-2-7B-Chat-GPTQ", cache_dir="models_cache")
+    tokenizer = AutoTokenizer.from_pretrained("TheBloke/Llama-2-7B-Chat-GPTQ", revision="gptq-4bit-64g-actorder_True"
+                                              # cache_dir="models_cache"
+                                              )
 
-    generation_config = GenerationConfig.from_pretrained("TheBloke/Llama-2-7B-Chat-GPTQ", cache_dir="models_cache")
+    generation_config = GenerationConfig.from_pretrained("TheBloke/Llama-2-7B-Chat-GPTQ",
+                                                         revision="gptq-4bit-64g-actorder_True"
+                                                         # cache_dir="models_cache"
+                                                         )
+
     generation_config.max_new_tokens = 1024
     generation_config.temperature = 0.05
     generation_config.top_p = 0.85
@@ -121,9 +127,9 @@ async def msg(message: chainlit.Message):
     )
     context += f"\n{user}:" + message.content
     callback.answer_reached = True
-    answer = await chain.acall({'name': user, 'context': context, 'conversation': message.content}, callbacks=[callback])
+    answer = await chain.acall({'name': user, 'context': context, 'conversation': message.content},
+                               callbacks=[callback])
     print(answer)
     context += "\nI: " + answer.get("text")
     chainlit.user_session.set("context", context)
-    await chainlit.Message(content=answer.get("text")).send()
-
+    await chainlit.Message(author="Assistant", content=answer.get("text")).send()
