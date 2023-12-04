@@ -1,0 +1,10 @@
+langchain
+chainlit
+huggingface-hub
+ctransformers
+transformers
+auto-gptq
+optimum
+torch
+accelerate
+
